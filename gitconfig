@@ -1,0 +1,20 @@
+# This is Git's per-user configuration file.
+[alias]
+        main = !git remote show origin | sed -n '/HEAD branch/s/.*: //p'
+        up   = !git checkout $(git main) && git pull && git checkout - && git rebase $(git main)
+        hist = log --all --decorate --oneline --graph
+        pf   = push --force-with-lease
+        bs   = branch -v
+        grep-all = !git grep $1 $(git rev-list --all)
+        code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -10"
+        cc = "!git code-changes"
+[init]
+	defaultBranch = trunk
+[user]
+	email = andrew@frenata.net
+	name = Andrew Nichols
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
