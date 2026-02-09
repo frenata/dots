@@ -1,0 +1,6 @@
+rebuild:
+	sudo darwin-rebuild switch --flake .#roar
+
+
+lock:
+	nix flake lock --update-input nixpkgs --update-input nix --update-input nix-darwin
