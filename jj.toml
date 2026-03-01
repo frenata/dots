@@ -9,7 +9,17 @@ email = "andrew@frenata.net"
 'closest_pushable(to)' = 'heads(::to & ~description(exact:"") & (~empty() | merges()))'
 
 [aliases]
-tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+tug = [
+  "bookmark",
+  "move",
+  "--from",
+  "closest_bookmark(@)",
+  "--to",
+  "closest_pushable(@)",
+]
 push = ["git", "push"]
 desc = ["describe"]
 msg = ["describe", "-m"]
+up = ["rebase", "-b", "@", "-d", "trunk()"]
+n = ["new", "-r", "trunk()"]
+pull = ["git", "fetch"]
