@@ -4,6 +4,11 @@
 name = "Andrew Nichols"
 email = "andrew@frenata.net"
 
+
+[colors]
+"change_id" = "green"
+"working_copy change_id" = "green"
+
 [revset-aliases]
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 'closest_pushable(to)' = 'heads(::to & ~description(exact:"") & (~empty() | merges()))'
@@ -25,3 +30,33 @@ n = ["new", "-r", "trunk()"]
 pull = ["git", "fetch"]
 book = ["bookmark", "create"]
 l = ["log", "--no-pager", "-n", "8"]
+bs = ["bookmark", "list", "--sort", "committer-date-", "-T", "bl_row_local"]
+bsa = [
+  "bookmark",
+  "list",
+  "--sort",
+  "committer-date-",
+  "--remote",
+  "origin",
+  "-T",
+  "bl_row_remote",
+]
+
+[template-aliases]
+'bl_row_local' = 'if(!remote,  bl_row_base(self))'
+'bl_row_remote' = 'if(remote,   bl_row_base(self))'
+'bl_row_base(ref)' = '''
+  ref.normal_target().change_id().shortest(7) ++ "  " ++
+  label("bookmark", ref.name()) ++ "\n" ++
+  "         " ++
+  separate("  ",
+    label("time", ref.normal_target().committer().timestamp().ago()),
+    if(stringify(ref.normal_target().committer().email()) != config("user.email").as_string(),
+      label("author", surround("(", ")", ref.normal_target().committer().email().local()))
+    ),
+    label("desc", coalesce(
+      truncate_end(70, ref.normal_target().description().first_line(), "…"),
+      "(no description)"
+    ))
+  ) ++ "\n"
+'''
