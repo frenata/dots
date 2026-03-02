@@ -20,6 +20,7 @@
 	pkgs.tmux
 	pkgs.alacritty
 	#pkgs.ghostty
+  pkgs.rustup
 	pkgs.emacs
 	pkgs.jq
 	pkgs.git
