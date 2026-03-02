@@ -89,3 +89,12 @@ $character"""
 when = "jj-starship detect"
 shell = ["jj-starship"]
 format = "$output "
+
+[battery]
+full_symbol = '🔋 '
+charging_symbol = '⚡️ '
+discharging_symbol = '💀 '
+
+[[battery.display]]
+threshold = 75
+style = 'bold red'
