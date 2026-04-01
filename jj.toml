@@ -41,6 +41,7 @@ bsa = [
   "-T",
   "bl_row_remote",
 ]
+cs = ["log", "-r", "mine() & (visible_heads() | bookmarks())"]
 
 [template-aliases]
 'bl_row_local' = 'if(!remote,  bl_row_base(self))'
