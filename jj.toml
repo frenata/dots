@@ -22,6 +22,8 @@ tug = [
   "--to",
   "closest_pushable(@)",
 ]
+flip = ["rebase", "-r", "@-", "-d", "@"]
+flop = ["rebase", "-r", "@", "-d", "@+"]
 push = ["git", "push"]
 desc = ["describe"]
 msg = ["describe", "-m"]
