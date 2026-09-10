@@ -18,3 +18,8 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[http]
+	sslCAInfo = /Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-openssl-combined-ca.pem
+[trace2]
+	eventTarget = af_unix:stream:/Users/frenata/.git-ai/internal/daemon/trace2.sock
+	eventNesting = 0
