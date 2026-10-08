@@ -39,9 +39,11 @@ jj new main -m "feat: add login page"
 jj describe -m "feat: implement user auth"
 
 # View what's in the current change
-jj diff
+jj diff --git
 jj status
 ```
+
+**Rule: always pass `--git` to `jj diff`.** The default format merges old/new lines in a way that obscures what actually changed; `--git` produces standard unified-diff output.
 
 ### Bookmarks (branches)
 
@@ -180,6 +182,18 @@ jj squash --into <parent-id> -- path/to/file.ts
 
 ---
 
+## Addressing Review Feedback
+
+When a stack is under review and you need to fix a finding, put the fix in a **new change on top of the stack** — don't `jj edit` a mid-stack change to fold it in.
+
+```bash
+jj new <tip> -m "fix: address review comment on X"
+```
+
+**Why:** reviewers see the fix as a discrete change rather than a commit they already read being mutated underneath them. Only move hunks down into the change they logically belong to (`jj squash --from <top> --into <target> -- <paths>`) if that's explicitly wanted. Default: leave the fix on top. An intermediate change may be transiently non-green — the merged PR is what must be correct, not each pre-merge commit.
+
+---
+
 ## Workspaces
 
 Use workspaces to work on multiple bookmarks simultaneously without stashing or context-switching.
@@ -214,7 +228,7 @@ jj log                          # Visual change graph
 jj log -r 'bookmarks()'         # Show only bookmarked changes
 jj show                         # Full diff of current change
 jj show <change-id>             # Diff of specific change
-jj diff -r <id1>..<id2>         # Diff between two changes
+jj diff --git -r <id1>..<id2>   # Diff between two changes
 jj op log                       # Operation history (undo with jj op undo)
 ```
 
@@ -259,3 +273,5 @@ jj new <change-id> -m "feat: try alternate approach"
 This leaves the abandoned chain intact and visible in `jj log`. You can return to it, compare it, or discard it later. Prefer this over `jj undo` when you want to keep both attempts in view.
 
 **Rule:** if you catch yourself deleting code to "undo" something, stop. Use `jj undo` or fork with `jj new`.
+
+**Never `jj abandon` a real attempt.** Once you've forked with `jj new <change>`, the old approach is already preserved as a sibling — do not follow up with `jj abandon` to "tidy" the stack. Abandoned changes vanish from `jj log`, taking the "we tried X, then switched to Y" trail with them. Reach for `jj abandon` only when a change was created in error (empty, accidental edit, dropped on the floor), never when it represents an approach that didn't pan out.
