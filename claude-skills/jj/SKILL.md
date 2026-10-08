@@ -7,6 +7,8 @@ description: Use this skill whenever working in a repository that uses jj (Jujut
 
 Use `jj` for all VCS operations in repos managed by Jujutsu. Never reach for `git` unless the user explicitly asks.
 
+**If a git repo has no colocated jj yet, initialize one first:** `jj git init --colocate`. This layers jj over the existing git repo — git keeps working untouched, and both see the same commits. Don't fall back to git just because jj isn't set up; check with `jj root` (or a `.jj/` dir) and colocate if it's missing.
+
 ## Core Mental Model
 
 In jj, the **working copy is always a change**. There's no separate staging area — though in the squash workflow below, an undescribed working change plays that role. Every edit is automatically part of the current change. Key concepts:
