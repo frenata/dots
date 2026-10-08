@@ -9,11 +9,29 @@ Use `jj` for all VCS operations in repos managed by Jujutsu. Never reach for `gi
 
 ## Core Mental Model
 
-In jj, the **working copy is always a change**. There's no staging area. Every edit is automatically part of the current change. Key concepts:
+In jj, the **working copy is always a change**. There's no separate staging area — though in the squash workflow below, an undescribed working change plays that role. Every edit is automatically part of the current change. Key concepts:
 
 - **Change**: The atomic unit of work (like a commit, but always mutable)
 - **Bookmark**: Named pointer to a change (jj's equivalent of a git branch)
 - **Workspace**: Independent working copy sharing the same repo — use for parallel workstreams
+
+---
+
+## Two Ways to Work
+
+jj supports two common workflows ([Klabnik's tutorial](https://steveklabnik.github.io/jujutsu-tutorial/real-world-workflows/intro.html) names both). Both are valid; fluent jj use shifts between them by task. Intuit which mode the user is in from how they framed the work — and switch when they nudge.
+
+**Edit workflow — plan first, described changes.** When the shape is known upfront, stub a chain of described changes (`jj new -m "..."`), implement into each, and jump between them with `jj edit <change>`. Edits land directly in the change you're on. This is the "Multi-Phase Work" pattern below. Reach for it when the user lays out phases, a plan, or distinct concerns before coding.
+
+**Squash workflow — plan as you go, staging change.** When the shape is still emerging, work in a single undescribed change — it becomes your staging area (jj's answer to `git add -p`). Let it accumulate, then decompose:
+
+- `jj split` — carve a concern out into its own change
+- `jj squash` / `jj squash --into <id>` — fold hunks down into an ancestor change
+- `jj absorb` — auto-distribute each hunk into whichever ancestor change last touched those lines
+
+Reach for it when the user just starts coding, says "let's see where this goes," or hands you a loose change to sort out afterward.
+
+**Switching is normal.** A common path: explore in the squash workflow, then once the structure is clear, describe the pieces and continue in the edit workflow. When unsure which mode the user wants, default to the squash workflow for open-ended work and the edit workflow for a stated plan — and ask if it's genuinely ambiguous.
 
 ---
 
@@ -108,7 +126,7 @@ When stubbing a change chain upfront, concise subjects alone are fine. Fill in b
 
 ## Multi-Phase Work
 
-When a task has a clear plan with phases (e.g., "first refactor X, then add feature Y, then update tests"):
+This is the **edit workflow** in practice. When a task has a clear plan with phases (e.g., "first refactor X, then add feature Y, then update tests"):
 
 1. **Map each phase to a change** using `jj new -m "..."` between phases
 2. **Name the series** with a bookmark at the final change
@@ -246,7 +264,7 @@ jj git push --all               # Push all bookmarks
 
 ## Key Principles for Claude
 
-1. **Describe before coding.** When given a plan, stub the change chain with `jj new -m "..."` calls first, then implement.
+1. **Match the workflow to the task.** Known plan → describe the change chain first and edit between the pieces (edit workflow). Open-ended → work in one undescribed change and decompose after (squash workflow). See "Two Ways to Work."
 2. **One concern per change.** If implementation drifts into multiple concerns, split proactively.
 3. **Bookmark at feature boundaries.** Every reviewable unit of work gets a named bookmark.
 4. **Never leave the working copy undescribed.** Always run `jj describe` before moving on.
