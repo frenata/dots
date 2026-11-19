@@ -1,0 +1,20 @@
+claude-skills/dark-factory/SKILL.md
+  s_057359e66365a1::t_d8507e28c6746d 48-56
+  s_057359e66365a1::t_f89eecc4c32bf0 69-102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5be6394035c376e536de670aaa53d4387f88b0dc",
+  "prompts": {},
+  "sessions": {
+    "s_057359e66365a1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "10f67862-bda8-4c26-a945-4f990bc825ed",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew Nichols <andrew@frenata.net>"
+    }
+  }
+}
